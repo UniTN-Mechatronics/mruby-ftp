@@ -6,7 +6,7 @@ Interface to `libftp` functions on mruby. it's based on Thomas Pfau's FTPlib lib
 
 ## Build status
 
-[![Build Status](https://travis-ci.org/UniTN-Mechatronics/mruby-ftp.svg)](https://travis-ci.org/UniTN-Mechatronics/mruby-ftp)
+[![Build Status](https://travis-ci.org/UniTN-Mechatronics/mruby-ftp.svg?branch=master)](https://travis-ci.org/UniTN-Mechatronics/mruby-ftp)
 
 ## Install
 
