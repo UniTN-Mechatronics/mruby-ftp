@@ -65,11 +65,11 @@ class FTP
   end
   
   def putbinaryfile(local, remote)
-    put(local, rmote, XFER[:binary])
+    put(local, remote, XFER[:binary])
   end
   
   def puttextfile(local, remote)
-    put(local, rmote, XFER[:text])
+    put(local, remote, XFER[:text])
   end
   def inspect
     "#<#{self.class}:0x#{self.hash.abs.to_s(16)} @user=#{@user || 'nil'}, @hostname=#{@hostname}, state=#{self.state}>"
