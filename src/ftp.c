@@ -175,13 +175,14 @@ static mrb_value mrb_ftp_data_init(mrb_state *mrb, mrb_value self) {
 
 // Connect Function. The function will instanciate a netbuf_data struct
 static mrb_value mrb_ftp_connect(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Rescue in case of not initialized @data not initialized.
   if (CHECK_DATA_NIL) {
     mrb_ftp_data_init(mrb, self);
   }
 
   // Loading data and making actual login
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->state == FTP_STATE_CLOSED) {
       // Loading @hostname, as required value
@@ -215,10 +216,11 @@ static mrb_value mrb_ftp_connect(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_login(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
 
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->state == FTP_STATE_CONNECTED) {
       mrb_value user = mrb_iv_get(mrb, self, mrb_intern_cstr(mrb, "@user"));
@@ -261,9 +263,10 @@ static mrb_value mrb_ftp_login(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_pwd(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -297,9 +300,10 @@ static mrb_value mrb_ftp_pwd(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_chdir(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -326,9 +330,10 @@ static mrb_value mrb_ftp_chdir(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_cdup(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -352,9 +357,10 @@ static mrb_value mrb_ftp_cdup(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_mkdir(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -386,9 +392,10 @@ static mrb_value mrb_ftp_mkdir(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_rmdir(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -420,23 +427,24 @@ static mrb_value mrb_ftp_rmdir(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_dir(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
         // Loading arguments
         char *dest_name = (char *)NULL;
         mrb_int len;
+        char *ret_str;
+        int result = 0;
         mrb_get_args(mrb, "|s", &dest_name, &len);
         if (!dest_name) {
           dest_name = (char *)malloc(5 * sizeof(char));
           strncpy(dest_name, ".", 4);
         }
         // Executing command
-        char *ret_str;
-        int result = 0;
         GRAB_STDOUT(ret_str,
                     result = FtpDir((const char *)NULL, dest_name, data->conn));
         // Results check
@@ -467,9 +475,10 @@ static mrb_value mrb_ftp_dir(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_nlst(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -514,9 +523,10 @@ static mrb_value mrb_ftp_nlst(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_put(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -550,9 +560,10 @@ static mrb_value mrb_ftp_put(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_get(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -586,9 +597,10 @@ static mrb_value mrb_ftp_get(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_delete(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -621,9 +633,10 @@ static mrb_value mrb_ftp_delete(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_rename(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -658,9 +671,10 @@ static mrb_value mrb_ftp_rename(mrb_state *mrb, mrb_value self) {
 
 // FIXME :: Not tested!
 static mrb_value mrb_ftp_size(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
@@ -694,9 +708,10 @@ static mrb_value mrb_ftp_size(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_close(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       // Quits from server no matter what the state!
@@ -715,9 +730,10 @@ static mrb_value mrb_ftp_close(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_lastmessage(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       char *pMsg = FtpLastResponse(data->conn);
@@ -734,11 +750,12 @@ static mrb_value mrb_ftp_lastmessage(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_state(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Return to be initialize if it finds @data = nil
   if (CHECK_DATA_NIL) {
     return mrb_fixnum_value(FTP_STATE_TO_INIT);
   }
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     return mrb_fixnum_value(data->state);
   } else {
@@ -748,9 +765,10 @@ static mrb_value mrb_ftp_state(mrb_state *mrb, mrb_value self) {
 }
 
 static mrb_value mrb_ftp_site(mrb_state *mrb, mrb_value self) {
+  struct netbuf_data *data;
   // Error in case of not initialized @data not initialized.
   CHECK_DATA_EXISTENCE
-  struct netbuf_data *data = CONNECTION_DATA_STRUCT;
+  data = CONNECTION_DATA_STRUCT;
   if (data) {
     if (data->conn) {
       if (data->state == FTP_STATE_LOGGED_IN) {
